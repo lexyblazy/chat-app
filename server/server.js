@@ -19,9 +19,21 @@ app.get('/',(req,res)=>{
 io.on('connection',(socket)=>{
     console.log('New User connected');
     
+    socket.on('sendEmail',(sentMail)=>{
+        console.log('Email was succesfully sent \n',sentMail);
+    })
+    
+    socket.emit('receiveEmail',{
+        from:"server@email.com",
+        to:"client@email.com",
+        text:"How are you :) ",
+        receivedAt: new Date().toTimeString()
+    })
+    
     socket.on('disconnect',()=>{
         console.log('Client Disconnected from server');
     })
+    
 })
 server.listen(PORT,IP,()=>{
     console.log('Server is up and running on port 3000');
