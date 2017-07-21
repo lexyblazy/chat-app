@@ -19,15 +19,16 @@ app.get('/',(req,res)=>{
 io.on('connection',(socket)=>{
     console.log('New User connected');
     
-    socket.on('sendEmail',(sentMail)=>{
-        console.log('Email was succesfully sent \n',sentMail);
-    })
-    
-    socket.emit('receiveEmail',{
-        from:"server@email.com",
-        to:"client@email.com",
-        text:"How are you :) ",
-        receivedAt: new Date().toTimeString()
+    socket.on('message',(message)=>{
+        
+        console.log('message from user',message);
+        
+        io.emit('message',{
+            from: message.from,
+            text: message.text,
+            createdAt: new Date().getTime() 
+        })
+        
     })
     
     socket.on('disconnect',()=>{
