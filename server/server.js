@@ -31,7 +31,12 @@ io.on('connection', (socket) => {
         callback('This is from the server');
 
     })
-
+    
+    socket.on('createLocationMessage',(coords)=>{
+        var locationUrl = `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
+        io.emit('locationMessage',messageGenerator('Admin',locationUrl));
+    })
+    
     socket.on('disconnect', () => {
         console.log('Client Disconnected from server');
     })
