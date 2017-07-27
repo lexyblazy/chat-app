@@ -5,6 +5,7 @@ const path = require('path');
 const socketIO = require('socket.io')
 const publicPath = path.join(__dirname, '../public');
 const {messageGenerator} = require('../utils/message');
+const  moment = require('moment');
 
 var PORT = process.env.PORT || 3000;
 var IP = process.env.IP;
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 })
 
 io.on('connection', (socket) => {
+    
     console.log('New User connected');
 
     socket.emit('message' , messageGenerator("Admin", "Welcome to chat app"));
@@ -34,7 +36,7 @@ io.on('connection', (socket) => {
     
     socket.on('createLocationMessage',(coords)=>{
         var locationUrl = `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
-        io.emit('locationMessage',messageGenerator('Admin',locationUrl));
+        io.emit('locationMessage', messageGenerator('Admin',locationUrl));
     })
     
     socket.on('disconnect', () => {
@@ -42,6 +44,8 @@ io.on('connection', (socket) => {
     })
 
 })
+
+
 server.listen(PORT, IP, () => {
     console.log('Server is up and running on port 3000');
 })
