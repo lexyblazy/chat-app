@@ -6,20 +6,26 @@ socket.on('connect', function () {
 socket.on('message', function (message) {
     console.log(message);
     var formattedTime = moment(message.createdAt).format('h:mma');
-    var li = $('<li></li>');
-    li.text(` ${formattedTime} - From ${message.from}: ${message.text}`);
-    $('#message-list').append(li)
+    var template = $('#message-template').html();
+    var html = Mustache.render(template,{
+        from:message.from,
+        text:message.text,
+        createdAt:formattedTime
+    })
+     $('#message-list').append(html)
 })
 
 socket.on('locationMessage', function (message) {
 
     var formattedTime = moment(message.createdAt).format('h:mma');
-    var li = $('<li></li>');
-    var a = $('<a target= "_blank">My Current Location<a>');
-    li.text(`${formattedTime} - ${message.from}: `)
-    a.attr('href', message.text);
-    li.append(a);
-    $('#message-list').append(li)
+    var template = $('#location-message-template').html();
+    var html = Mustache.render(template,{
+        from:message.from,
+        text:message.text,
+        createdAt:formattedTime
+    })
+
+    $('#message-list').append(html)
 
 
 })
